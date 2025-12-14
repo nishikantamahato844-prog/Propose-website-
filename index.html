@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Will You Be My Boyfriend? 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 12s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 50% 100%; }
+            75% { background-position: 0% 50%; }
+        }
+
+        .heart {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.5);
+            transform: rotate(45deg);
+            animation: float 5s infinite ease-in-out;
+            filter: blur(1px);
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            left: -12.5px;
+        }
+
+        .heart::after {
+            top: -12.5px;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(45deg) scale(0.3);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(405deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .page {
+            display: none;
+            animation: pageSlideIn 0.6s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes pageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 40px 30px;
+            border-radius: 35px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5), 
+                        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            z-index: 10;
+            animation: containerFloat 3s ease-in-out infinite;
+            backdrop-filter: blur(15px);
+        }
+
+        @keyframes containerFloat {
+            0%, 100% {
+                transform: translateY(0px);
+                box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+            }
+            50% {
+                transform: translateY(-15px);
+                box-shadow: 0 35px 90px rgba(0, 0, 0, 0.6);
+            }
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            animation: textGradient 3s ease infinite, titlePulse 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes textGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .emoji-container {
+            position: relative;
+            display: inline-block;
+            margin: 25px 0;
+        }
+
+        .emoji {
+            font-size: 100px;
+            animation: emojiFloat 2.5s ease-in-out infinite;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes emojiFloat {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-20px) rotate(-5deg);
+            }
+            75% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        .emoji.tap-animation {
+            animation: emojiTap 0.6s ease;
+        }
+
+        @keyframes emojiTap {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+            }
+            25% {
+                transform: scale(1.3) rotate(-15deg);
+            }
+            75% {
+                transform: scale(1.3) rotate(15deg);
+            }
+        }
+
+        .emoji-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: glowPulse 2s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.3);
+                opacity: 0.8;
+            }
+        }
+
+        p {
+            color: #555;
+            font-size: 1.1em;
+            margin: 12px 0;
+            line-height: 1.7;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 35px;
+        }
+
+        button {
+            padding: 20px 40px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+            animation: buttonPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 20px 45px rgba(102, 126, 234, 0.7);
+            }
+        }
+
+        .next-btn:active {
+            transform: scale(0.95);
+            animation: none;
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            box-shadow: 0 15px 35px rgba(76, 175, 80, 0.5);
+            animation: buttonPulse 2s ease-in-out infinite;
+        }
+
+        .no-btn {
+            background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+            color: #666;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            animation: noButtonShake 3s ease-in-out infinite;
+        }
+
+        @keyframes noButtonShake {
+            0%, 90%, 100% { transform: translateX(0); }
+            92%, 96% { transform: translateX(-5px); }
+            94%, 98% { transform: translateX(5px); }
+        }
+
+        .decoration {
+            position: fixed;
+            font-size: 45px;
+            animation: decorationFloat 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes decorationFloat {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0.6;
+            }
+            25% {
+                transform: translate(20px, -20px) rotate(90deg) scale(1.2);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(0, -40px) rotate(180deg) scale(0.9);
+                opacity: 0.5;
+            }
+            75% {
+                transform: translate(-20px, -20px) rotate(270deg) scale(1.1);
+                opacity: 0.7;
+            }
+        }
+
+        .decoration:nth-child(1) {
+            top: 8%;
+            left: 8%;
+            animation-delay: 0s;
+        }
+
+        .decoration:nth-child(2) {
+            top: 12%;
+            right: 8%;
+            animation-delay: -3s;
+        }
+
+        .decoration:nth-child(3) {
+            bottom: 12%;
+            left: 10%;
+            animation-delay: -6s;
+        }
+
+        .decoration:nth-child(4) {
+            bottom: 8%;
+            right: 10%;
+            animation-delay: -9s;
+        }
+
+        .celebration {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.97) 0%, rgba(118, 75, 162, 0.97) 100%);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: celebrationFadeIn 0.5s ease;
+        }
+
+        @keyframes celebrationFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .celebration-content {
+            text-align: center;
+            color: white;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+            animation: celebrationBounce 1s ease;
+            max-width: 90%;
+        }
+
+        @keyframes celebrationBounce {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .celebration h2 {
+            font-size: 4em;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #fff 0%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: celebrationPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes celebrationPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .celebration p {
+            font-size: 1.4em;
+            color: white;
+            margin: 15px 0;
+        }
+
+        .celebration .emoji {
+            font-size: 100px;
+            animation: celebrationEmojiSpin 2s ease-in-out infinite;
+        }
+
+        @keyframes celebrationEmojiSpin {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .message-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            padding: 25px;
+            border-radius: 25px;
+            margin: 25px 0;
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            animation: messageBoxGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes messageBoxGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+                border-color: rgba(102, 126, 234, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(102, 126, 234, 0.6);
+                border-color: rgba(102, 126, 234, 0.7);
+            }
+        }
+
+        .sparkle {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkleAnimation 1.2s ease-out;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes sparkleAnimation {
+            0% {
+                opacity: 1;
+                transform: scale(0) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.5) rotate(180deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0) rotate(360deg);
+            }
+        }
+
+        .page-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
+        }
+
+        .story-text {
+            text-align: left;
+            color: #444;
+            font-size: 1.05em;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+
+        .highlight {
+            color: #764ba2;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration">💖</div>
+    <div class="decoration">✨</div>
+    <div class="decoration">💕</div>
+    <div class="decoration">💫</div>
+
+    <div class="page active" id="page1">
+        <div class="container">
+            <h1>Our Story Begins 📖</h1>
+            
+            <div class="emoji-container">
+                <div class="emoji-glow"></div>
+                <div class="emoji">👋</div>
+            </div>
+            
+            <div class="message-box">
+                <p class="story-text">Do you remember the <span class="highlight">first time we met?</span></p>
+                <p class="story-text">That moment when our eyes locked and everything else faded away...</p>
+                <p class="story-text">I knew there was something <span class="highlight">special</span> about you from that very first smile. 💫</p>
+            </div>
+            
+            <button class="next-btn" onclick="nextPage()">Next ➜</button>
+            
+            <div class="page-indicator">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page" id="page2">
+        <div class="container">
+            <h1>Our First Talk 💬</h1>
+            
+            <div class="emoji-container">
+                <div class="emoji-glow"></div>
+                <div class="emoji">😊</div>
+            </div>
+            
+            <div class="message-box">
+                <p class="story-text">Remember our <span class="highlight">first conversation?</span></p>
+                <p class="story-text">We talked for hours and it felt like minutes. Time just disappeared when I was with you.</p>
+                <p class="story-text">Your laugh, your stories, your energy... Everything about you was <span class="highlight">captivating</span>! ✨</p>
+            </div>
+            
+            <button class="next-btn" onclick="nextPage()">Next ➜</button>
+            
+            <div class="page-indicator">
+                <div class="dot"></div>
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page" id="page3">
+        <div class="container">
+            <h1>Growing Closer 🌟</h1>
+            
+            <div class="emoji-container">
+                <div class="emoji-glow"></div>
+                <div class="emoji">🥰</div>
+            </div>
+            
+            <div class="message-box">
+                <p class="story-text">As days turned into weeks, every moment we shared became a <span class="highlight">treasure</span>.</p>
+                <p class="story-text">Late night texts, random calls, silly jokes... Each one made me fall for you a little more.</p>
+                <p class="story-text">You became my <span class="highlight">favorite person</span> to talk to. 💕</p>
+            </div>
+            
+            <button class="next-btn" onclick="nextPage()">Next ➜</button>
+            
+            <div class="page-indicator">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot active"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page" id="page4">
+        <div class="container">
+            <h1>The Big Question 💜</h1>
+            
+            <div class="emoji-container">
+                <div class="emoji-glow"></div>
+                <div class="emoji" id="mainEmoji">😊</div>
+            </div>
+            
+            <div class="message-box">
+                <p>I've been thinking about this for a while...</p>
+                <p><strong style="font-size: 1.2em;">Will you be my boyfriend?</strong></p>
+            </div>
+            
+            <div class="buttons">
+                <button class="yes-btn" id="yesBtn">Yes! 💕</button>
+                <button class="no-btn" id="noBtn">No</button>
+            </div>
+
+            <div class="page-indicator">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot active"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <h2>Yay! 🎉</h2>
+            <div class="emoji">😍</div>
+            <p>I'm so happy!</p>
+            <p>You just made my day! 💖</p>
+            <p>This is the beginning of something amazing! ✨</p>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const totalPages = 4;
+        const emojis = ['😊', '😍', '🥰', '😘', '💕', '🤗', '💖'];
+        let emojiIndex = 0;
+        const mainEmoji = document.getElementById('mainEmoji');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        let noBtnMoved = false;
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                document.getElementById('page' + currentPage).classList.remove('active');
+                currentPage++;
+                document.getElementById('page' + currentPage).classList.add('active');
+                
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+                
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 2 + 4) + 's';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 7000);
+        }
+
+        setInterval(createHeart, 200);
+
+        if (mainEmoji) {
+            mainEmoji.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                emojiIndex = (emojiIndex + 1) % emojis.length;
+                mainEmoji.textContent = emojis[emojiIndex];
+                mainEmoji.classList.add('tap-animation');
+                
+                for (let i = 0; i < 8; i++) {
+                    setTimeout(() => createSparkle(e.touches[0].clientX, e.touches[0].clientY), i * 50);
+                }
+                
+                setTimeout(() => {
+                    mainEmoji.classList.remove('tap-animation');
+                }, 600);
+            });
+        }
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = x + (Math.random() * 60 - 30) + 'px';
+            sparkle.style.top = y + (Math.random() * 60 - 30) + 'px';
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 1200);
+        }
+
+        if (yesBtn) {
+            yesBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                sayYes();
+            });
+        }
+
+        function sayYes() {
+            const celebration = document.getElementById('celebration');
+            celebration.style.display = 'flex';
+            
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100, 50, 200]);
+            }
+            
+            for (let i = 0; i < 200; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-20px';
+                    const colors = ['#667eea', '#764ba2', '#f093fb', '#ff6b6b', '#4ecdc4', '#ffe66d', '#a8e6cf', '#ffd3b6'];
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 1 + 2) + 's';
+                    confetti.style.width = (Math.random() * 8 + 8) + 'px';
+                    confetti.style.height = (Math.random() * 8 + 8) + 'px';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3500);
+                }, i * 15);
+            }
+        }
+
+        if (noBtn) {
+            noBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                
+                if (!noBtnMoved) {
+                    noBtnMoved = true;
+                    noBtn.textContent = '😢 Try Again';
+                }
+                
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                
+                const btnWidth = noBtn.offsetWidth;
+                const btnHeight = noBtn.offsetHeight;
+                
+                const maxX = windowWidth - btnWidth - 40;
+                const maxY = windowHeight - btnHeight - 40;
+                
+                const randomX = Math.random() * (maxX - 40) + 20;
+                const randomY = Math.random() * (maxY - 40) + 20;
+                
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = randomX + 'px';
+                noBtn.style.top = randomY + 'px';
+                noBtn.style.transition = 'all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+            });
+        }
+
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.tagName === 'BUTTON') {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
