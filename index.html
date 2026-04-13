@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cricket Quiz Challenge</title>
+    <title>Will You Be My Boyfriend? 💕</title>
     <style>
         * {
             margin: 0;
@@ -18,740 +18,256 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(45deg);
+            animation: float 6s infinite;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            left: -10px;
+        }
+
+        .heart::after {
+            top: -10px;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(45deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
         }
 
         .container {
-            background: white;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 40px;
+            border-radius: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 800px;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
             text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
         }
 
-        .header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 16px;
-        }
-
-        .start-screen, .quiz-screen, .result-screen {
-            padding: 40px;
-        }
-
-        .start-screen {
-            text-align: center;
-        }
-
-        .start-screen h2 {
-            color: #333;
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
             margin-bottom: 20px;
-            font-size: 28px;
+            animation: fadeIn 1s ease-in;
         }
 
-        .start-screen p {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 18px;
+        .emoji {
+            font-size: 80px;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        p {
+            color: #555;
+            font-size: 1.2em;
+            margin: 20px 0;
             line-height: 1.6;
         }
 
-        .start-btn, .next-btn, .restart-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
             padding: 15px 40px;
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 1.1em;
+            border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
         }
 
-        .start-btn:hover, .next-btn:hover, .restart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .progress-bar {
-            background: #e0e0e0;
-            height: 8px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
+        .yes-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-
-        .question-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .question {
-            color: #333;
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .option {
-            background: #f5f5f5;
-            border: 2px solid transparent;
-            padding: 18px 25px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .option:hover {
-            background: #e8e8e8;
-            transform: translateX(5px);
-        }
-
-        .option.selected {
-            background: #e0e7ff;
-            border-color: #667eea;
-            color: #667eea;
-        }
-
-        .option.correct {
-            background: #d1fae5;
-            border-color: #10b981;
-            color: #065f46;
-        }
-
-        .option.incorrect {
-            background: #fee2e2;
-            border-color: #ef4444;
-            color: #991b1b;
-        }
-
-        .option.disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .quiz-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .next-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .result-screen {
-            text-align: center;
-        }
-
-        .score-circle {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto 30px;
             color: white;
         }
 
-        .score-circle .score {
-            font-size: 48px;
-            font-weight: 700;
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
         }
 
-        .score-circle .total {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-
-        .result-message {
-            font-size: 28px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .result-details {
+        .no-btn {
+            background: #e0e0e0;
             color: #666;
-            font-size: 18px;
-            margin-bottom: 30px;
+            position: relative;
         }
 
-        .stats {
-            background: #f9fafb;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+        .no-btn:hover {
+            background: #d0d0d0;
         }
 
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .hidden {
+        .celebration {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
         }
 
-        .feedback {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            line-height: 1.5;
+        .celebration-content {
+            text-align: center;
+            color: white;
+            animation: fadeIn 1s ease-in;
         }
 
-        .feedback.correct {
-            background: #d1fae5;
-            color: #065f46;
+        .celebration h2 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .feedback.incorrect {
-            background: #fee2e2;
-            color: #991b1b;
+        .celebration p {
+            font-size: 1.5em;
+            color: white;
         }
 
-        @media (max-width: 600px) {
-            .stats {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            position: absolute;
+            animation: confetti-fall 3s linear infinite;
+        }
 
-            .header h1 {
-                font-size: 24px;
-            }
-
-            .question {
-                font-size: 18px;
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🏏 Cricket Quiz Challenge</h1>
-            <p>Test Your Cricket Knowledge</p>
+        <h1>Hey There! 💜</h1>
+        <div class="emoji">😊</div>
+        <p>I've been thinking about this for a while...</p>
+        <p><strong>Will you be my girlfriend?</strong></p>
+        <div class="buttons">
+            <button class="yes-btn" onclick="sayYes()">Yes! 💕</button>
+            <button class="no-btn" id="noBtn" onclick="moveButton()">No</button>
         </div>
+    </div>
 
-        <div class="start-screen" id="startScreen">
-            <h2>Welcome to the Ultimate Cricket Quiz!</h2>
-            <p>Challenge yourself with 50 medium-level questions covering cricket history, players, records, and memorable moments. Are you ready to prove your cricket expertise?</p>
-            <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
-        </div>
-
-        <div class="quiz-screen hidden" id="quizScreen">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div class="question-info">
-                <span id="questionNumber">Question 1 of 50</span>
-                <span id="scoreDisplay">Score: 0</span>
-            </div>
-            <div class="question" id="question"></div>
-            <div class="options" id="options"></div>
-            <div class="feedback hidden" id="feedback"></div>
-            <div class="quiz-controls">
-                <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button>
-            </div>
-        </div>
-
-        <div class="result-screen hidden" id="resultScreen">
-            <div class="score-circle">
-                <div class="score" id="finalScore">0</div>
-                <div class="total">out of 50</div>
-            </div>
-            <div class="result-message" id="resultMessage"></div>
-            <div class="result-details" id="resultDetails"></div>
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="correctCount">0</div>
-                    <div class="stat-label">Correct</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="incorrectCount">0</div>
-                    <div class="stat-label">Incorrect</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="percentage">0%</div>
-                    <div class="stat-label">Accuracy</div>
-                </div>
-            </div>
-            <button class="restart-btn" onclick="restartQuiz()">Play Again</button>
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <h2>Yay! 🎉</h2>
+            <div class="emoji">😍</div>
+            <p>I'm so happy! You just made my day! 💖</p>
         </div>
     </div>
 
     <script>
-        const questions = [
-            {
-                question: "Who holds the record for the fastest century in ODI cricket?",
-                options: ["AB de Villiers", "Corey Anderson", "Shahid Afridi", "Chris Gayle"],
-                correct: 0,
-                explanation: "AB de Villiers scored a century in just 31 balls against West Indies in 2015."
-            },
-            {
-                question: "In which year did India win their first Cricket World Cup?",
-                options: ["1975", "1979", "1983", "1987"],
-                correct: 2,
-                explanation: "India won their first World Cup in 1983 under Kapil Dev's captaincy, defeating West Indies."
-            },
-            {
-                question: "Who has taken the most wickets in Test cricket history?",
-                options: ["Shane Warne", "Anil Kumble", "Muttiah Muralitharan", "James Anderson"],
-                correct: 2,
-                explanation: "Muttiah Muralitharan holds the record with 800 Test wickets."
-            },
-            {
-                question: "What is the highest individual score in Test cricket?",
-                options: ["375", "400 not out", "365 not out", "380"],
-                correct: 1,
-                explanation: "Brian Lara scored 400 not out for West Indies against England in 2004."
-            },
-            {
-                question: "Which country hosted the first ever Cricket World Cup in 1975?",
-                options: ["Australia", "England", "India", "West Indies"],
-                correct: 1,
-                explanation: "The first Cricket World Cup was hosted by England in 1975."
-            },
-            {
-                question: "Who is known as the 'God of Cricket'?",
-                options: ["Sachin Tendulkar", "Ricky Ponting", "Brian Lara", "Jacques Kallis"],
-                correct: 0,
-                explanation: "Sachin Tendulkar is widely regarded as the 'God of Cricket' by fans worldwide."
-            },
-            {
-                question: "How many runs did Sachin Tendulkar score in his Test career?",
-                options: ["15,921", "15,470", "15,921", "16,500"],
-                correct: 0,
-                explanation: "Sachin Tendulkar scored 15,921 runs in Test cricket across 200 matches."
-            },
-            {
-                question: "Which bowler has taken a hat-trick in both ODI and T20 World Cups?",
-                options: ["Brett Lee", "Lasith Malinga", "Wasim Akram", "Mitchell Starc"],
-                correct: 1,
-                explanation: "Lasith Malinga achieved hat-tricks in both ODI (2007) and T20 (2014) World Cups."
-            },
-            {
-                question: "What is the maximum number of overs a bowler can bowl in a T20 match?",
-                options: ["3", "4", "5", "6"],
-                correct: 1,
-                explanation: "In T20 cricket, a bowler can bowl a maximum of 4 overs per match."
-            },
-            {
-                question: "Who captained Australia to five consecutive World Cup finals from 1996-2015?",
-                options: ["Steve Waugh", "Ricky Ponting", "Michael Clarke", "Multiple captains"],
-                correct: 3,
-                explanation: "Different captains led Australia: Mark Taylor (1996), Steve Waugh (1999), Ricky Ponting (2003, 2007), Michael Clarke (2015)."
-            },
-            {
-                question: "Which player has hit the most sixes in international cricket?",
-                options: ["Chris Gayle", "Shahid Afridi", "Rohit Sharma", "MS Dhoni"],
-                correct: 0,
-                explanation: "Chris Gayle holds the record for most sixes across all formats of international cricket."
-            },
-            {
-                question: "What is a 'golden duck' in cricket?",
-                options: ["Getting out on 99", "Getting out first ball", "Scoring 100 runs", "Taking a wicket first ball"],
-                correct: 1,
-                explanation: "A golden duck is when a batsman gets out on the first ball they face."
-            },
-            {
-                question: "Who was the first player to score a double century in ODI cricket?",
-                options: ["Sachin Tendulkar", "Virender Sehwag", "Rohit Sharma", "Chris Gayle"],
-                correct: 0,
-                explanation: "Sachin Tendulkar was the first to score an ODI double century (200*) against South Africa in 2010."
-            },
-            {
-                question: "Which country won the first T20 World Cup in 2007?",
-                options: ["Australia", "India", "Pakistan", "Sri Lanka"],
-                correct: 1,
-                explanation: "India won the inaugural T20 World Cup in 2007, defeating Pakistan in the final."
-            },
-            {
-                question: "What is the term for a delivery that dismisses three batsmen in consecutive balls?",
-                options: ["Triple wicket", "Hat-trick", "Three-in-three", "Turkey"],
-                correct: 1,
-                explanation: "Taking three wickets in three consecutive deliveries is called a hat-trick."
-            },
-            {
-                question: "Who holds the record for most runs in a single IPL season?",
-                options: ["Virat Kohli", "Chris Gayle", "David Warner", "AB de Villiers"],
-                correct: 0,
-                explanation: "Virat Kohli scored 973 runs in the 2016 IPL season, the highest ever in a single season."
-            },
-            {
-                question: "Which spinner has taken the most wickets in ODI cricket?",
-                options: ["Muttiah Muralitharan", "Saqlain Mushtaq", "Anil Kumble", "Shane Warne"],
-                correct: 0,
-                explanation: "Muttiah Muralitharan has taken 534 wickets in ODI cricket, the most by any bowler."
-            },
-            {
-                question: "What is the weight range of a cricket ball in Test matches?",
-                options: ["140-145 grams", "155-163 grams", "150-160 grams", "165-170 grams"],
-                correct: 1,
-                explanation: "A cricket ball used in Test matches weighs between 155.9 and 163 grams."
-            },
-            {
-                question: "Who scored the fastest Test century by an Indian?",
-                options: ["Virender Sehwag", "Kapil Dev", "Rishabh Pant", "Shardul Thakur"],
-                correct: 2,
-                explanation: "Rishabh Pant scored a Test century in just 73 balls against Sri Lanka in 2022."
-            },
-            {
-                question: "Which cricketer is known as 'Captain Cool'?",
-                options: ["Rahul Dravid", "MS Dhoni", "Virat Kohli", "Sourav Ganguly"],
-                correct: 1,
-                explanation: "MS Dhoni earned the nickname 'Captain Cool' for his calm demeanor under pressure."
-            },
-            {
-                question: "What does LBW stand for in cricket?",
-                options: ["Left Ball Wide", "Leg Before Wicket", "Long Ball Wide", "Late Ball Wicket"],
-                correct: 1,
-                explanation: "LBW stands for Leg Before Wicket, a method of dismissal in cricket."
-            },
-            {
-                question: "Who was the first cricketer to take 10 wickets in a Test innings?",
-                options: ["Jim Laker", "Anil Kumble", "Muttiah Muralitharan", "Richard Hadlee"],
-                correct: 0,
-                explanation: "Jim Laker took 10/53 for England against Australia in 1956, the first to achieve this feat."
-            },
-            {
-                question: "How many players from each team are on the field during a cricket match?",
-                options: ["10", "11", "12", "13"],
-                correct: 1,
-                explanation: "11 players from each team are on the field, with one team batting and the other fielding."
-            },
-            {
-                question: "Which stadium is known as the 'Home of Cricket'?",
-                options: ["MCG", "Lord's", "Eden Gardens", "SCG"],
-                correct: 1,
-                explanation: "Lord's Cricket Ground in London is traditionally referred to as the 'Home of Cricket'."
-            },
-            {
-                question: "Who has scored the most centuries in Test cricket?",
-                options: ["Sachin Tendulkar", "Ricky Ponting", "Jacques Kallis", "Steve Smith"],
-                correct: 0,
-                explanation: "Sachin Tendulkar has scored 51 Test centuries, the most in cricket history."
-            },
-            {
-                question: "What is the duration of a Test match?",
-                options: ["3 days", "4 days", "5 days", "6 days"],
-                correct: 2,
-                explanation: "A Test match is scheduled to be played over 5 days, with 90 overs per day."
-            },
-            {
-                question: "Who was the first bowler to take 300 wickets in Test cricket?",
-                options: ["Fred Trueman", "Dennis Lillee", "Ian Botham", "Kapil Dev"],
-                correct: 0,
-                explanation: "Fred Trueman of England was the first bowler to reach 300 Test wickets in 1964."
-            },
-            {
-                question: "Which team has won the most Cricket World Cups?",
-                options: ["India", "West Indies", "Australia", "England"],
-                correct: 2,
-                explanation: "Australia has won the Cricket World Cup 5 times (1987, 1999, 2003, 2007, 2015)."
-            },
-            {
-                question: "What is a 'Yorker' in cricket?",
-                options: ["A bouncer", "A full toss", "A ball pitched at the batsman's feet", "A wide ball"],
-                correct: 2,
-                explanation: "A yorker is a delivery that pitches right at or near the batsman's feet, making it difficult to hit."
-            },
-            {
-                question: "Who has the highest batting average in Test cricket (minimum 20 innings)?",
-                options: ["Don Bradman", "Steve Smith", "Virat Kohli", "Kumar Sangakkara"],
-                correct: 0,
-                explanation: "Don Bradman holds an unmatched Test batting average of 99.94."
-            },
-            {
-                question: "Which bowler has the best bowling figures in an ODI innings?",
-                options: ["Chaminda Vaas", "Glenn McGrath", "Muttiah Muralitharan", "Shahid Afridi"],
-                correct: 0,
-                explanation: "Chaminda Vaas took 8 wickets for 19 runs against Zimbabwe in 2001, the best ODI figures."
-            },
-            {
-                question: "What is the maximum width of a cricket bat according to ICC rules?",
-                options: ["10.0 cm", "10.8 cm", "11.5 cm", "12.0 cm"],
-                correct: 1,
-                explanation: "According to ICC rules, the maximum width of a cricket bat is 10.8 cm (4.25 inches)."
-            },
-            {
-                question: "Who captained England to their first World Cup victory in 2019?",
-                options: ["Alastair CooCook", "Joe Root", "Eoin Morgan", "Andrew Strauss"],
-                correct: 2,
-                explanation: "Eoin Morgan captained England to their first Cricket World Cup title in 2019."
-            },
-            {
-                question: "What is the term for zero runs scored by a batsman?",
-                options: ["Zero", "Nothing", "Duck", "Blank"],
-                correct: 2,
-                explanation: "When a batsman is dismissed without scoring any runs, it's called a 'duck'."
-            },
-            {
-                question: "Who holds the record for the highest partnership in Test cricket?",
-                options: ["Kumar Sangakkara & Mahela Jayawardene", "Andrew Jones & Martin Crowe", "Marvan Atapattu & Kumar Sangakkara", "Don Bradman & Bill Ponsford"],
-                correct: 0,
-                explanation: "Kumar Sangakkara and Mahela Jayawardene hold the record with a 624-run partnership for Sri Lanka."
-            },
-            {
-                question: "Which player has hit six sixes in a single over in international cricket?",
-                options: ["Chris Gayle", "Yuvraj Singh", "Herschelle Gibbs", "Both B and C"],
-                correct: 3,
-                explanation: "Both Yuvraj Singh (2007 T20 World Cup) and Herschelle Gibbs (2007 ODI) have hit six sixes in an over."
-            },
-            {
-                question: "What is the term for a ball that spins away from a right-handed batsman when bowled by a right-arm spinner?",
-                options: ["Off-spin", "Leg-spin", "Googly", "Doosra"],
-                correct: 1,
-                explanation: "A leg-spin delivery turns away from a right-handed batsman when bowled by a right-arm spinner."
-            },
-            {
-                question: "Who was the first batsman to score 10,000 runs in Test cricket?",
-                options: ["Sunil Gavaskar", "Allan Border", "Sachin Tendulkar", "Brian Lara"],
-                correct: 0,
-                explanation: "Sunil Gavaskar was the first batsman to reach 10,000 Test runs in 1987."
-            },
-            {
-                question: "Which format of cricket was introduced first?",
-                options: ["Test", "ODI", "T20", "T10"],
-                correct: 0,
-                explanation: "Test cricket was the first format, with the inaugural match played in 1877."
-            },
-            {
-                question: "Who has scored the most runs in a single Test innings?",
-                options: ["Brian Lara", "Matthew Hayden", "Don Bradman", "Virender Sehwag"],
-                correct: 0,
-                explanation: "Brian Lara scored 400 not out against England in 2004, the highest individual Test score."
-            },
-            {
-                question: "What is the minimum number of overs that must be bowled for a T20 match to be considered complete?",
-                options: ["5 overs", "10 overs", "15 overs", "20 overs"],
-                correct: 0,
-                explanation: "A minimum of 5 overs per side must be bowled for a T20 match to constitute a match."
-            },
-            {
-                question: "Who is the only player to score 100 international centuries?",
-                options: ["Ricky Ponting", "Sachin Tendulkar", "Virat Kohli", "Kumar Sangakkara"],
-                correct: 1,
-                explanation: "Sachin Tendulkar is the only player with 100 international centuries (51 Test + 49 ODI)."
-            },
-            {
-                question: "Which country won the first ever day-night Test match?",
-                options: ["Australia", "New Zealand", "England", "India"],
-                correct: 0,
-                explanation: "Australia won the first day-night Test match against New Zealand in 2015."
-            },
-            {
-                question: "What does DRS stand for in cricket?",
-                options: ["Direct Review System", "Decision Review System", "Digital Review System", "Dismissal Review System"],
-                correct: 1,
-                explanation: "DRS stands for Decision Review System, used to review umpiring decisions."
-            },
-            {
-                question: "Who has taken the most wickets in T20 International cricket?",
-                options: ["Rashid Khan", "Tim Southee", "Shakib Al Hasan", "Lasith Malinga"],
-                correct: 2,
-                explanation: "Shakib Al Hasan has taken over 140 wickets in T20I cricket, the most by any bowler."
-            },
-            {
-                question: "Which stadium has hosted the most Test matches?",
-                options: ["MCG", "Lord's", "Eden Gardens", "The Oval"],
-                correct: 1,
-                explanation: "Lord's Cricket Ground has hosted the most Test matches in cricket history."
-            },
-            {
-                question: "Who was the first player to take a wicket with his first ball in Test cricket?",
-                options: ["Alec Bedser", "Charles Bannerman", "Many players", "George Lohmann"],
-                correct: 2,
-                explanation: "Several players have taken a wicket with their first ball in Test cricket throughout history."
-            },
-            {
-                question: "What is the highest team score in ODI cricket?",
-                options: ["481/6", "444/3", "496/4", "438/9"],
-                correct: 2,
-                explanation: "England scored 496/4 against Australia in 2018, the highest ODI team total."
-            },
-            {
-                question: "Who has the most catches as a fielder (non-wicketkeeper) in Test cricket?",
-                options: ["Rahul Dravid", "Jacques Kallis", "Ricky Ponting", "Mahela Jayawardene"],
-                correct: 0,
-                explanation: "Rahul Dravid has taken 210 catches as a non-wicketkeeper in Test cricket, the most ever."
-            },
-            {
-                question: "Which bowler has bowled the most maiden overs in Test cricket?",
-                options: ["Glenn McGrath", "Courtney Walsh", "Shane Warne", "James Anderson"],
-                correct: 1,
-                explanation: "Courtney Walsh bowled 659 maiden overs in his Test career, the most by any bowler."
-            }
-        ];
-
-        let currentQuestion = 0;
-        let score = 0;
-        let answeredQuestions = 0;
-        let selectedAnswer = null;
-
-        function startQuiz() {
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('quizScreen').classList.remove('hidden');
-            loadQuestion();
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 8000);
         }
 
-        function loadQuestion() {
-            const q = questions[currentQuestion];
-            document.getElementById('question').textContent = q.question;
-            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
-            document.getElementById('scoreDisplay').textContent = `Score: ${score}`;
+        setInterval(createHeart, 500);
+
+        function sayYes() {
+            const celebration = document.getElementById('celebration');
+            celebration.style.display = 'flex';
             
-            const progressPercent = ((currentQuestion) / questions.length) * 100;
-            document.getElementById('progressFill').style.width = progressPercent + '%';
-
-            const optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = '';
-            
-            q.options.forEach((option, index) => {
-                const optionDiv = document.createElement('div');
-                optionDiv.className = 'option';
-                optionDiv.textContent = option;
-                optionDiv.onclick = () => selectAnswer(index);
-                optionsContainer.appendChild(optionDiv);
-            });
-
-            document.getElementById('feedback').classList.add('hidden');
-            document.getElementById('nextBtn').disabled = true;
-            selectedAnswer = null;
-        }
-
-        function selectAnswer(index) {
-            if (selectedAnswer !== null) return;
-
-            selectedAnswer = index;
-            const options = document.querySelectorAll('.option');
-            const q = questions[currentQuestion];
-            
-            options.forEach(opt => opt.classList.add('disabled'));
-            
-            if (index === q.correct) {
-                options[index].classList.add('correct');
-                score++;
-                showFeedback(true, q.explanation);
-            } else {
-                options[index].classList.add('incorrect');
-                options[q.correct].classList.add('correct');
-                showFeedback(false, q.explanation);
-            }
-
-            answeredQuestions++;
-            document.getElementById('scoreDisplay').textContent = `Score: ${score}`;
-            document.getElementById('nextBtn').disabled = false;
-        }
-
-        function showFeedback(isCorrect, explanation) {
-            const feedback = document.getElementById('feedback');
-            feedback.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
-            feedback.textContent = (isCorrect ? '✓ Correct! ' : '✗ Incorrect. ') + explanation;
-            feedback.classList.remove('hidden');
-        }
-
-        function nextQuestion() {
-            currentQuestion++;
-            if (currentQuestion < questions.length) {
-                loadQuestion();
-            } else {
-                showResults();
+            // Create confetti
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
             }
         }
 
-        function showResults() {
-            document.getElementById('quizScreen').classList.add('hidden');
-            document.getElementById('resultScreen').classList.remove('hidden');
-
-            const percentage = Math.round((score / questions.length) * 100);
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            const container = document.querySelector('.container');
+            const containerRect = container.getBoundingClientRect();
             
-            document.getElementById('finalScore').textContent = score;
-            document.getElementById('correctCount').textContent = score;
-            document.getElementById('incorrectCount').textContent = questions.length - score;
-            document.getElementById('percentage').textContent = percentage + '%';
-
-            let message = '';
-            let details = '';
-
-            if (percentage >= 90) {
-                message = '🏆 Outstanding! Cricket Expert!';
-                details = 'You have exceptional cricket knowledge!';
-            } else if (percentage >= 75) {
-                message = '🎯 Excellent Performance!';
-                details = 'You really know your cricket!';
-            } else if (percentage >= 60) {
-                message = '👍 Good Job!';
-                details = 'Solid cricket knowledge, keep it up!';
-            } else if (percentage >= 40) {
-                message = '📚 Keep Learning!';
-                details = 'You\'re on the right track, practice more!';
-            } else {
-                message = '💪 Keep Practicing!';
-                details = 'Watch more cricket and try again!';
-            }
-
-            document.getElementById('resultMessage').textContent = message;
-            document.getElementById('resultDetails').textContent = details;
-        }
-
-        function restartQuiz() {
-            currentQuestion = 0;
-            score = 0;
-            answeredQuestions = 0;
-            selectedAnswer = null;
-            document.getElementById('resultScreen').classList.add('hidden');
-            document.getElementById('startScreen').classList.remove('hidden');
+            const maxX = containerRect.width - noBtn.offsetWidth - 40;
+            const maxY = containerRect.height - noBtn.offsetHeight - 40;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
         }
     </script>
 </body>
